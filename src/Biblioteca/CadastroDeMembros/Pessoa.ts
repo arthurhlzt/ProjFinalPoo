@@ -1,8 +1,8 @@
 export class Pessoa {
 
-    private _nome: string;
-    private _telefone: number;
-    private _endereco: string;
+    protected _nome: string;
+    protected _telefone: number;
+    protected _endereco: string;
 
     constructor(nome: string, telefone: number, endereco: string) {
         this._nome = nome;
@@ -14,14 +14,17 @@ export class Pessoa {
         return this._nome;
     }
     public set nome(nome: string) {
+        if (nome.length < 3 || nome.length > 20) {
+            throw new Error("Nome Inválido")
+        }
         this._nome = nome;
     }
 
     public get telefone(): number {
         return this._telefone;
     }
-    public set telefone(telefone: number) {
-        this._telefone = telefone;
+    public set telefone(tel: number) {
+        this._telefone = tel;
     }
     
     public get endereco(): string {
