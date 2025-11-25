@@ -1,0 +1,29 @@
+{
+  "livros": [
+    {
+      "id": "1",
+      "titulo": "O Senhor dos Anéis",
+      "autor": "J.R.R. Tolkien",
+      "ano_publicacao": 1954,
+      "genero": "Fantasia",
+      "disponivel": false
+    }
+  ],
+  "membros": [],
+  "emprestimos": [
+    {
+      "id": "273e",
+      "idLivro": "e154",
+      "idMembro": "1",
+      "dataEmprestimo": "2025-11-25T03:00:00.000Z",
+      "dataDevolucao": "2025-11-26T03:00:00.000Z"
+    },
+    {
+      "id": "efba",
+      "idLivro": "0",
+      "idMembro": "0",
+      "dataEmprestimo": null,
+      "dataDevolucao": "2025-12-12T03:00:00.000Z"
+    }
+  ]
+}
