@@ -7,6 +7,14 @@
       "ano_publicacao": 1954,
       "genero": "Fantasia",
       "disponivel": false
+    },
+    {
+      "id": "a7c6",
+      "titulo": "It: A Coisa",
+      "autor": "Stephen King",
+      "isbn": "978-85-6028-094-0",
+      "anoPublicacao": 1986,
+      "disponivel": true
     }
   ],
   "membros": [

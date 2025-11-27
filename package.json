@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "api": "json-server --watch db.json --port 3000"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "api": "json-server --watch db.json --port 3000",
+    "start": "tsx sistema-simples.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +24,7 @@
     "@types/node": "^24.10.1",
     "@types/prompt-sync": "^4.2.3",
     "jest": "^30.2.0",
-    "ts-jest": "^29.4.5"
+    "ts-jest": "^29.4.5",
+    "tsx": "^4.20.6"
   }
 }

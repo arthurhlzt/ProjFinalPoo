@@ -11,29 +11,32 @@ const teclado = Prompt();
 const gerenciamentoMembro = new GerenciamentoMembro();
 
 async function listarMembros() {
-    let membros = await gerenciamentoMembro.listarMembros();
-    console.log("\nLista de Membros:");
-    membros.forEach((membro: Membro) => {
-        membro.listarMembro();
-    });
+    console.log("\n=== Lista de Membros ===");
+    const membros = await gerenciamentoMembro.listarMembros();
+    if (membros.length === 0) {
+        console.log("Nenhum membro cadastrado.");
+    } else {
+        membros.forEach((membro: Membro) => membro.listarMembro());
+    }
 }
 
 async function atualizarMembro() {
-    console.log("\n --- Atualizar Membro --- ");
-    const id = teclado("Digite o ID do membro a ser atualizado: ");
+    console.log("\n=== Atualizar Membro ===");
+    const id = teclado("ID do membro: ");
 
     const membros = await gerenciamentoMembro.listarMembros();
     const membroExistente = membros.find((m: Membro) => m.id === id);
 
     if (!membroExistente) {
-        console.log("\nMembro não encontrado!");
+        console.log("✗ Membro não encontrado!");
         return;
     }
 
-    const nome = teclado("Novo nome (Enter para manter): ");
-    const endereco = teclado("Novo endereço (Enter para manter): ");
-    const telefone = teclado("Novo telefone (Enter para manter): ");
-    const nrMatricula = teclado("Novo número de matrícula (Enter para manter): ");
+    console.log("\nDeixe em branco para manter o valor atual:");
+    const nome = teclado("Nome: ");
+    const endereco = teclado("Endereço: ");
+    const telefone = teclado("Telefone: ");
+    const nrMatricula = teclado("Matrícula: ");
 
     const dadosAtt = {
         nome: nome.trim() || membroExistente.nome,
@@ -43,143 +46,112 @@ async function atualizarMembro() {
     };
 
     await gerenciamentoMembro.atualizarMembro(id, dadosAtt);
-    console.log("\nAtualização de membro concluída.");
-
-
+    console.log("✓ Membro atualizado com sucesso!");
 }
 
 async function deletarMembro() {
-    console.log("\n --- Deletar Membro --- ");
-    const id = teclado("Digite o ID do membro a ser deletado: ");
+    console.log("\n=== Deletar Membro ===");
+    const id = teclado("ID do membro: ");
 
     if (!id.trim()) {
-        console.log("\nErro: ID do membro é obrigatório!");
+        console.log("✗ Erro: ID é obrigatório!");
         return;
     }
 
     await gerenciamentoMembro.deletarMembro(id);
-    console.log("\nMembro deletado com sucesso.");
+    console.log("✓ Membro deletado com sucesso!");
 }
 
 async function adicionarMembro() {
-    console.log("\n --- Adicionar Membro --- ");
+    console.log("\n=== Adicionar Membro ===");
     const nome = teclado("Nome: ");
     const endereco = teclado("Endereço: ");
-    const telefone = teclado("Telefone (Formato: 53 999999999): ");
-    const nrMatricula = teclado("Número de matrícula (4 dígitos): ");
+    const telefone = teclado("Telefone: ");
+    const nrMatricula = teclado("Número de matrícula: ");
 
     if (!nome.trim() || !endereco.trim() || !telefone.trim() || !nrMatricula.trim()) {
-        console.log("\nErro: Todos os campos são obrigatórios!");
+        console.log("✗ Erro: Todos os campos são obrigatórios!");
         return;
-    }
-
-    if (!telefone.includes(' ')) {
-        console.log("\nErro: Telefone deve conter um espaço no formato 53 999999999!");
-        return;
-    }
-
-    const partes = telefone.split(' ');
-    if (partes.length !== 2) {
-        console.log("\nErro: Telefone deve ter apenas um espaço no formato 53 999999999!");
-        return;
-    }
-
-    const dddValido = partes[0]!.length === 2;
-    const numeroValido = partes[1]!.length === 9;
-
-    if (!dddValido || !numeroValido) {
-        console.log("\nErro: Telefone deve estar no formato 53 999999999 (2 dígitos - espaço - 9 dígitos)!");
-        return;
-    }
-
-    // Validação de matrícula: deve ter exatamente 4 dígitos numéricos
-    if (nrMatricula.trim().length !== 4) {
-        console.log("\nErro: Número de matrícula deve ter exatamente 4 dígitos!");
-        return;
-    }
-
-    // Verifica se todos os caracteres são números
-    for (let i = 0; i < nrMatricula.trim().length; i++) {
-        const caractere = nrMatricula.trim()[i]!;
-        if (caractere < '0' || caractere > '9') {
-            console.log("\nErro: Número de matrícula deve conter apenas números!");
-            return;
-        }
     }
 
     const novoMembro = new Membro(nome.trim(), endereco.trim(), telefone.trim(), nrMatricula.trim());
     const membroAdicionado = await gerenciamentoMembro.adicionarMembro(novoMembro);
-    console.log("\nMembro adicionado com ID:", membroAdicionado.id);
+    console.log("✓ Membro adicionado com sucesso! ID:", membroAdicionado.id);
 }
 
 const gerenciamentoLivro = new GerenciamentoLivro();
 
 async function adicionarLivro() {
-    console.log("\n --- Adicionar Livro --- ");
+    console.log("\n=== Adicionar Livro ===");
     const titulo = teclado("Título: ");
     const autor = teclado("Autor: ");
     const isbn = teclado("ISBN: ");
     const anoPublicacao = teclado("Ano de Publicação: ");
-    const statusDisponivel = teclado("O livro está disponível? (s/n): ");
+    const statusDisponivel = teclado("Disponível? (s/n): ");
 
-    if (!titulo.trim() || !autor.trim() || !isbn.trim() || !anoPublicacao.trim() || !statusDisponivel.trim()) {
-        console.log("\nErro: Todos os campos são obrigatórios!");
+    if (!titulo.trim() || !autor.trim() || !isbn.trim() || !anoPublicacao.trim()) {
+        console.log("✗ Erro: Título, Autor, ISBN e Ano são obrigatórios!");
         return;
     }
 
-    const novoLivro = new Livro(titulo.trim(), autor.trim(), isbn.trim(), parseInt(anoPublicacao), statusDisponivel.trim().toLowerCase() === 's');
+    const disponivel = statusDisponivel.trim().toLowerCase() === 's';
+    const novoLivro = new Livro(titulo.trim(), autor.trim(), isbn.trim(), parseInt(anoPublicacao), disponivel);
     const livroAdicionado = await gerenciamentoLivro.adicionarLivro(novoLivro);
-    console.log("\nLivro adicionado com ID:", livroAdicionado.id);
+    console.log("✓ Livro adicionado com sucesso! ID:", livroAdicionado.id);
 }
 
 async function listarLivros() {
-    let livros = await gerenciamentoLivro.listarLivros();
-    livros.forEach((livro: Livro) => {
-        livro.listarLivro();
-    });
+    console.log("\n=== Lista de Livros ===");
+    const livros = await gerenciamentoLivro.listarLivros();
+    if (livros.length === 0) {
+        console.log("Nenhum livro cadastrado.");
+    } else {
+        livros.forEach((livro: Livro) => livro.listarLivro());
+    }
 }
 
 async function deletarLivro() {
-    console.log("\n --- Deletar Livro --- ");
-    const id = teclado("Digite o ID do livro a ser deletado: ");
+    console.log("\n=== Deletar Livro ===");
+    const id = teclado("ID do livro: ");
 
     if (!id.trim()) {
-        console.log("\nErro: ID do livro é obrigatório!");
+        console.log("✗ Erro: ID é obrigatório!");
         return;
     }
 
     await gerenciamentoLivro.deletarLivro(id);
-    console.log("\nLivro deletado com sucesso.");
+    console.log("✓ Livro deletado com sucesso!");
 }
 
 async function atualizarLivro() {
-    console.log("\n --- Atualizar Livro --- ");
-    const id = teclado("Digite o ID do livro a ser atualizado: ");
+    console.log("\n=== Atualizar Livro ===");
+    const id = teclado("ID do livro: ");
 
     const livros = await gerenciamentoLivro.listarLivros();
     const livroExistente = livros.find((l: Livro) => l.id === id);
 
     if (!livroExistente) {
-        console.log("\nLivro não encontrado!");
+        console.log("✗ Livro não encontrado!");
         return;
     }
 
-    const titulo = teclado("Novo título (Enter para manter): ");
-    const autor = teclado("Novo autor (Enter para manter): ");
-    const isbn = teclado("Novo ISBN (Enter para manter): ");
-    const anoPublicacao = teclado("Novo ano de publicação (Enter para manter): ");
-    const statusDisponivel = teclado("O livro está disponível (Enter para manter)? (s/n): ");
+    console.log("\nDeixe em branco para manter o valor atual:");
+    const titulo = teclado("Título: ");
+    const autor = teclado("Autor: ");
+    const isbn = teclado("ISBN: ");
+    const anoPublicacao = teclado("Ano: ");
+    const statusDisponivel = teclado("Disponível? (s/n): ");
 
     const dadosAtt = {
         titulo: titulo.trim() || livroExistente.titulo,
         autor: autor.trim() || livroExistente.autor,
         isbn: isbn.trim() || livroExistente.isbn,
-        anoPublicacao: parseInt(anoPublicacao) || livroExistente.anoPublicacao,
-        disponivel: statusDisponivel.trim().toLowerCase() === 's'
+        anoPublicacao: anoPublicacao.trim() ? parseInt(anoPublicacao) : livroExistente.anoPublicacao,
+        disponivel: statusDisponivel.trim() ? statusDisponivel.trim().toLowerCase() === 's' : livroExistente.disponivel
     };
 
     await gerenciamentoLivro.atualizarLivro(id, dadosAtt);
-    console.log("\nAtualização de livro concluída.");
+    console.log("✓ Livro atualizado com sucesso!");
 }
 
 const gerenciamentoEmprestimo = new GerenciamentoEmprestimo();
@@ -193,14 +165,14 @@ function converterData(dataStr: string): Date {
 }
 
 async function adicionarEmprestimo() {
-    console.log("\n --- Adicionar Empréstimo --- ");
+    console.log("\n=== Adicionar Empréstimo ===");
     const idLivro = teclado("ID do Livro: ");
     const idMembro = teclado("ID do Membro: ");
     const dataEmprestimo = teclado("Data de Empréstimo (dd-mm-aaaa): ");
-    const dataDevolucao = teclado("Data de Devolução (dd-mm-aaaa ou Enter para null): ");
+    const dataDevolucao = teclado("Data de Devolução (dd-mm-aaaa ou Enter): ");
 
     if (!idLivro.trim() || !idMembro.trim() || !dataEmprestimo.trim()) {
-        console.log("\nErro: ID do Livro, ID do Membro e Data de Empréstimo são obrigatórios!");
+        console.log("✗ Erro: ID do Livro, ID do Membro e Data são obrigatórios!");
         return;
     }
 
@@ -212,46 +184,49 @@ async function adicionarEmprestimo() {
     );
 
     const emprestimoAdicionado = await gerenciamentoEmprestimo.adicionarEmprestimo(novoEmprestimo);
-    console.log("Empréstimo adicionado com ID:", emprestimoAdicionado.id);
+    console.log("✓ Empréstimo adicionado com sucesso! ID:", emprestimoAdicionado.id);
 }
 
 async function listarEmprestimos() {
-    let emprestimos = await gerenciamentoEmprestimo.listarEmprestimos();
-    emprestimos.forEach((emprestimo: Emprestimo) => {
-        emprestimo.listarEmprestimo();
-    });
+    console.log("\n=== Lista de Empréstimos ===");
+    const emprestimos = await gerenciamentoEmprestimo.listarEmprestimos();
+    if (emprestimos.length === 0) {
+        console.log("Nenhum empréstimo registrado.");
+    } else {
+        emprestimos.forEach((emprestimo: Emprestimo) => emprestimo.listarEmprestimo());
+    }
 }
 
 async function deletarEmprestimo() {
-    console.log("--- Deletar Empréstimo --- ");
-    const id = teclado("Digite o ID do empréstimo a ser deletado: ");
+    console.log("\n=== Deletar Empréstimo ===");
+    const id = teclado("ID do empréstimo: ");
 
     if (!id.trim()) {
-        console.log("\nErro: ID do empréstimo é obrigatório!");
+        console.log("✗ Erro: ID é obrigatório!");
         return;
     }
 
     await gerenciamentoEmprestimo.deletarEmprestimo(id);
-    console.log("\nEmpréstimo deletado com sucesso.");
+    console.log("✓ Empréstimo deletado com sucesso!");
 }
 
 async function atualizarEmprestimo() {
-    console.log("\n --- Atualizar Empréstimo --- ");
-    const id = teclado("Digite o ID do empréstimo a ser atualizado: ");
+    console.log("\n=== Atualizar Empréstimo ===");
+    const id = teclado("ID do empréstimo: ");
 
     const emprestimo = await gerenciamentoEmprestimo.buscarEmprestimoPorId(id);
     if (!emprestimo) {
-        console.log("Empréstimo não encontrado.");
+        console.log("✗ Empréstimo não encontrado!");
         return;
     }
 
-    const dataDevolucao = teclado("Nova Data de Devolução (dd-mm-aa ou Enter para null): ");
+    const dataDevolucao = teclado("Data de Devolução (dd-mm-aaaa ou Enter): ");
     const dadosAtt = {
-        dataDevolucao: dataDevolucao.trim() ? new Date(dataDevolucao.trim()) : null
+        dataDevolucao: dataDevolucao.trim() ? converterData(dataDevolucao.trim()) : null
     };
 
     await gerenciamentoEmprestimo.atualizarEmprestimo(id, dadosAtt);
-    console.log("Atualização de empréstimo concluída.");
+    console.log("✓ Empréstimo atualizado com sucesso!");
 }
 
 async function listarEmprestimosAtivos() {
@@ -269,18 +244,18 @@ async function listarEmprestimosAtivos() {
 
 async function menu() {
     while (true) {
-        console.log('\n===========================================');
-        console.log('   SISTEMA DE GERENCIAMENTO DE BIBLIOTECA   ');
-        console.log('===========================================');
-        console.log("1. Gerenciar Membros");
-        console.log("2. Gerenciar Livros");
-        console.log("3. Gerenciar Empréstimos");
-        console.log("0. Sair");
-        console.log('===========================================');
+        console.log('\n══════════════════════════════════════════════');
+        console.log('  SISTEMA DE GERENCIAMENTO DE BIBLIOTECA');
+        console.log('══════════════════════════════════════════════');
+        console.log("\n[1] Gerenciar Membros");
+        console.log("[2] Gerenciar Livros");
+        console.log("[3] Gerenciar Empréstimos");
+        console.log("[0] Sair\n");
 
-        const escolha = teclado("Escolha uma opção: ");
+        const escolha = teclado("Opção: ");
+        
         if (escolha === "0") {
-            console.log("\nSaindo do sistema. Até logo!");
+            console.log("\n👋 Até logo!");
             break;
         }
 
@@ -295,7 +270,7 @@ async function menu() {
                 await menuEmprestimos();
                 break;
             default:
-                console.log("Opção inválida. Tente novamente.");
+                console.log("✗ Opção inválida!");
         }
     }
 }
