@@ -1,17 +1,21 @@
+import Livro from "./Livro";
+import Membro from "./Membro";
+
 export default class Emprestimo {
     constructor(
-        private _idLivro: string,
-        private _idMembro: string,
+        private _livro: Livro,
+        private _membro: Membro,
         private _dataEmprestimo: Date,
         private _dataDevolucao: Date | null = null,
         public id: string | null = null
     ) {}
-    get idLivro(): string {
-        return this._idLivro;
+
+    get livro(): Livro {
+        return this._livro;
     }
 
-    get idMembro(): string {
-        return this._idMembro;
+    get membro(): Membro {
+        return this._membro;
     }
 
     get dataEmprestimo(): Date {
@@ -26,12 +30,12 @@ export default class Emprestimo {
         this._dataDevolucao = data;
     }
 
-    set idLivro(idLivro: string) {
-        this._idLivro = idLivro;
+    set livro(livro: Livro) {
+        this._livro = livro;
     }
 
-    set idMembro(idMembro: string) {
-        this._idMembro = idMembro; 
+    set membro(membro: Membro) {
+        this._membro = membro;
     }
 
     set dataEmprestimo(data: Date) {
@@ -39,6 +43,6 @@ export default class Emprestimo {
     }
 
     public listarEmprestimo(): void {
-        console.log(`\nID: Empréstimo: ${this.id} | ID Livro: ${this.idLivro} | ID Membro: ${this.idMembro} | Data Empréstimo: ${this.dataEmprestimo.toLocaleDateString()} | Data Devolução: ${this.dataDevolucao ? this.dataDevolucao.toLocaleDateString() : 'Não devolvido'}`);
+        console.log(`\nID Empréstimo: ${this.id} | Livro: ${this.livro.titulo} (ID: ${this.livro.id}) | Membro: ${this.membro.nome} (ID: ${this.membro.id}) | Data Empréstimo: ${this.dataEmprestimo.toLocaleDateString()} | Data Devolução: ${this.dataDevolucao ? this.dataDevolucao.toLocaleDateString() : 'Não devolvido'}`);
     }
 }
