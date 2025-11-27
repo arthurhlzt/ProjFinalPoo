@@ -56,7 +56,6 @@ export default class GerenciamentoLivro {
         );
     }
     public async deletarLivro(id: string): Promise<void> {
-        // const url = `${this.baseURL}/${id}`;
         await this.api.delete(`${this.baseURL}/${id}`);
     }
     }

@@ -33,7 +33,6 @@ export default class GerenciamentoMembro {
         return new Membro(data.nome, data.endereco, data.telefone, data.nrMatricula, data.id);
     }
     public async deletarMembro(id: string): Promise<void> {
-        // const url = `${this.baseURL}/${id}`;
         await this.api.delete(`${this.baseURL}/${id}`);
     }
 }
