@@ -175,10 +175,26 @@ async function adicionarEmprestimo() {
         console.log("✗ Erro: ID do Livro, ID do Membro e Data são obrigatórios!");
         return;
     }
+    
+    const livros = await gerenciamentoLivro.listarLivros();
+    const livro = livros.find(l => l.id === idLivro.trim());
+    
+    const membros = await gerenciamentoMembro.listarMembros();
+    const membro = membros.find(m => m.id === idMembro.trim());
+
+    if (!livro) {
+        console.log("✗ Erro: Livro não encontrado!");
+        return;
+    }
+
+    if (!membro) {
+        console.log("✗ Erro: Membro não encontrado!");
+        return;
+    }
 
     const novoEmprestimo = new Emprestimo(
-        idLivro.trim(),
-        idMembro.trim(),
+        livro,
+        membro,
         converterData(dataEmprestimo.trim()),
         dataDevolucao.trim() ? converterData(dataDevolucao.trim()) : null
     );
